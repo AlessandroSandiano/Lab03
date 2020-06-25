@@ -14,6 +14,7 @@ import javafx.scene.control.TextArea;
 public class FXMLController {
 	
 	Dictionary dictionary;
+	boolean linearResearch = true;
 	List<String> inputTextList = new LinkedList<>();
 	List<RichWord> listRichWords = new LinkedList<>();
 
@@ -62,7 +63,10 @@ public class FXMLController {
     	for (int i=0; i<array.length; i++)
     		inputTextList.add(array[i]);
     	start = System.nanoTime();
-    	listRichWords.addAll(dictionary.spellCheckText(inputTextList));
+    	if (linearResearch == true)
+    		listRichWords.addAll(dictionary.spellCheckTextLinear(inputTextList));
+    	else
+    		listRichWords.addAll(dictionary.spellCheckTextDichotomic(inputTextList));
     	stop = System.nanoTime();
     	for (RichWord r: listRichWords)
     		if (r.isCorrect() == false) {

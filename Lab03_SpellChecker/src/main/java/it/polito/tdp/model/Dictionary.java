@@ -15,6 +15,7 @@ public class Dictionary {
 			while ((word = br.readLine()) != null)
 				dictionaryWords.add(word);
 			br.close();
+			System.out.println("Dictionary loaded. Found " + dictionaryWords.size() + " words");
 		}
 		catch (IOException e) {
 			System.err.println("Errore nella lettura del file.");
@@ -29,7 +30,6 @@ public class Dictionary {
 		List <RichWord> list = new LinkedList<>();
 		for (String s: inputTextList) {
 			RichWord r = new RichWord (s);
-			System.out.println(s+"\n");
 			if (dictionaryWords.contains(s))
 				r.setCorrect(true);
 			else

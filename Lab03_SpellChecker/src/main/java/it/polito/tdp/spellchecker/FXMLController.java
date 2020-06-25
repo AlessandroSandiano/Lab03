@@ -54,10 +54,10 @@ public class FXMLController {
     	int cont = 0;
     	Long start, stop;
     	dictionary.loadDictionary(languageButton.getText());
-    	String s1 = inputTextArea.getText(), s;
-    	s = s1.toLowerCase();
-    	s.replaceAll("[.,\\/#!$%\\^&\\*;:{}=\\-_'´~()\\[\\]\"]", "");
-    	s.replaceAll("\n", " ");
+    	String s = inputTextArea.getText();
+    	s = s.toLowerCase();
+    	s = s.replaceAll("[.,\\/#!$%\\^&\\*;:{}?=\\-_`'´~()\\[\\]\"]", "");
+    	s = s.replaceAll("\n", " ");
     	String array[] = s.split(" ");
     	for (int i=0; i<array.length; i++)
     		inputTextList.add(array[i]);
@@ -71,6 +71,9 @@ public class FXMLController {
     		}
     	wrongWordsMessage.setText("The text contains " + cont + " errors");
     	timeMessage.setText("Spell check completed in " + ((stop-start)/1e9) + " seconds");
+    	dictionary.getDictionaryWords().clear();
+    	inputTextList.clear();
+    	listRichWords.clear();
     }
 
     @FXML

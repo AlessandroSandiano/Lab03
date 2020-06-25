@@ -10,6 +10,8 @@ public class Dictionary {
 	
 	
 	public void loadDictionary (String language) {
+		if (dictionaryWords.size() > 0)
+			return;
 		try {
 			FileReader fr = new FileReader("src/main/resources/" + language + ".txt");
 			BufferedReader br = new BufferedReader(fr);

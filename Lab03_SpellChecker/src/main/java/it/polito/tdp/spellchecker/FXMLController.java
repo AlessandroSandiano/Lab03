@@ -48,10 +48,12 @@ public class FXMLController {
     	wrongWordsMessage.setText("");
     	messageTextArea.clear();
     	inputTextArea.clear();
+    	languageButton.setDisable(false);
     }
 
     @FXML
     void doSpellCheck(ActionEvent event) {
+    	languageButton.setDisable(true);
     	int cont = 0;
     	Long start, stop;
     	dictionary.loadDictionary(languageButton.getText());
@@ -75,7 +77,6 @@ public class FXMLController {
     		}
     	wrongWordsMessage.setText("The text contains " + cont + " errors");
     	timeMessage.setText("Spell check completed in " + ((stop-start)/1e9) + " seconds");
-    	dictionary.getDictionaryWords().clear();
     	inputTextList.clear();
     	listRichWords.clear();
     }

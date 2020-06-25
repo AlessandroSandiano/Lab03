@@ -1,24 +1,100 @@
-/**
- * Sample Skeleton for 'Scene.fxml' Controller Class
- */
-
 package it.polito.tdp.spellchecker;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import it.polito.tdp.model.Dictionary;
+import it.polito.tdp.model.RichWord;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.TextArea;
 
 public class FXMLController {
+	
+	Dictionary dictionary;
+	List<String> inputTextList = new LinkedList<>();
+	List<RichWord> listRichWords = new LinkedList<>();
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
+    @FXML
+    private MenuButton languageButton;
 
+    @FXML
+    private TextArea inputTextArea;
+
+    @FXML
+    private TextArea messageTextArea;
+
+    @FXML
+    private Label wrongWordsMessage;
+
+    @FXML
+    private Label timeMessage;
+
+    @FXML
+    void doClearText(ActionEvent event) {
+    	dictionary.getDictionaryWords().clear();
+    	inputTextList.clear();
+    	listRichWords.clear();
+    	timeMessage.setText("");
+    	wrongWordsMessage.setText("");
+    	messageTextArea.clear();
+    	inputTextArea.clear();
+    }
+
+    @FXML
+    void doSpellCheck(ActionEvent event) {
+    	int cont = 0;
+    	Long start, stop;
+    	dictionary.loadDictionary(languageButton.getText());
+    	String s1 = inputTextArea.getText(), s;
+    	s = s1.toLowerCase();
+    	s.replaceAll("[.,\\/#!$%\\^&\\*;:{}=\\-_'´~()\\[\\]\"]", "");
+    	s.replaceAll("\n", " ");
+    	String array[] = s.split(" ");
+    	for (int i=0; i<array.length; i++)
+    		inputTextList.add(array[i]);
+    	start = System.nanoTime();
+    	listRichWords.addAll(dictionary.spellCheckText(inputTextList));
+    	stop = System.nanoTime();
+    	for (RichWord r: listRichWords)
+    		if (r.isCorrect() == false) {
+    			messageTextArea.appendText(r.toString() + "\n");
+    			cont++;
+    		}
+    	wrongWordsMessage.setText("The text contains " + cont + " errors");
+    	timeMessage.setText("Spell check completed in " + ((stop-start)/1e9) + " seconds");
+    }
+
+    @FXML
+    void setEnglish(ActionEvent event) {
+    	languageButton.setText("English");
+    }
+
+    @FXML
+    void setItalian(ActionEvent event) {
+    	languageButton.setText("Italian");
+    }
+
+    @FXML
+    void initialize() {
+        assert languageButton != null : "fx:id=\"languageButton\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert inputTextArea != null : "fx:id=\"inputTextArea\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert messageTextArea != null : "fx:id=\"messageTextArea\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert wrongWordsMessage != null : "fx:id=\"wrongWordsMessage\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert timeMessage != null : "fx:id=\"timeMessage\" was not injected: check your FXML file 'Scene.fxml'.";
+
+    }
+    
+    public void setModel (Dictionary model) {
+    	this.dictionary = model;
     }
 }
 
